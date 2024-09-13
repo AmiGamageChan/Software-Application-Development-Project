@@ -1,0 +1,4 @@
+Sep 14, 2024 2:36:16 AM gui.MainDashboard setLogger
+INFO: Logger initialized
+Sep 14, 2024 2:36:29 AM gui.UserLogin loginButtonActionPerformed
+INFO: A user logged in
