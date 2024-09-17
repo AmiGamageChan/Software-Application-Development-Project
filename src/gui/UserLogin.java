@@ -363,6 +363,7 @@ public class UserLogin extends javax.swing.JDialog {
                     String type = result.getString("user_type.name");
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Logged In Successfully");
                     mainBoard.setStatusLabel().setText(type);
+                    mainBoard.setNameLabel().setText(result.getString("user.fname"));
                     if (type.equals("admin")) {
                         mainBoard.setOrderButton().setEnabled(true);
                         mainBoard.setTableButton().setEnabled(true);

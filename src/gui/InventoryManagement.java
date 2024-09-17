@@ -5,14 +5,15 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import static gui.EmployeeManagement.logger;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.SQL;
@@ -23,6 +24,9 @@ import raven.toast.Notifications;
  * @author AmiChan
  */
 public class InventoryManagement extends javax.swing.JFrame {
+
+    private static final Logger logger = Logger.getLogger(UserLogin.class.getName());
+    public String mainFrame = "null";
 
     private void setLogger() {
         try {
@@ -39,7 +43,13 @@ public class InventoryManagement extends javax.swing.JFrame {
 
         }
     }
+    
     private static HashMap<String, String> itemTypeMap = new HashMap<>();
+    private MainFrame parent;
+
+    public void setParent(MainFrame mf) {
+        this.parent = mf;
+    }
 
     /**
      * Creates new form InventoryManagement
@@ -70,7 +80,6 @@ public class InventoryManagement extends javax.swing.JFrame {
                 query += " ORDER BY `menu_item`.`price` DESC";
             }
             ResultSet result = SQL.executeSearch(query);
-
             while (result.next()) {
                 Vector<String> vector = new Vector<>();
 
@@ -401,18 +410,48 @@ public class InventoryManagement extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        int row = jTable2.getSelectedRow();
 
-        if (evt.getClickCount() == 2) {
-            jTabbedPane1.setSelectedIndex(0);
+        if (mainFrame.equals("null")) {
+            if (evt.getClickCount() == 2) {
+                int row = jTable2.getSelectedRow();
+                jTabbedPane1.setSelectedIndex(0);
 
-            jTextField1.setText(String.valueOf(jTable2.getValueAt(row, 1)));
-            jTextField2.setText(String.valueOf(jTable2.getValueAt(row, 2)));
-            jTextField3.setText(String.valueOf(jTable2.getValueAt(row, 4)));
-            jComboBox1.setSelectedItem(String.valueOf(jTable2.getValueAt(row, 3)));
+                jTextField1.setText(String.valueOf(jTable2.getValueAt(row, 1)));
+                jTextField2.setText(String.valueOf(jTable2.getValueAt(row, 2)));
+                jTextField3.setText(String.valueOf(jTable2.getValueAt(row, 4)));
+                jComboBox1.setSelectedItem(String.valueOf(jTable2.getValueAt(row, 3)));
 
-            jButton1.setEnabled(false);
-            jButton2.setEnabled(true);
+                jButton1.setEnabled(false);
+                jButton2.setEnabled(true);
+            }
+        } else if (mainFrame.equals("main")) {
+            if (evt.getClickCount() == 2) {
+                int row = jTable2.getSelectedRow();
+                parent.getItemField().setText(String.valueOf(jTable2.getValueAt(row, 1)));
+                parent.getItemField().setEnabled(false);
+                parent.getPriceField().setText(String.valueOf(jTable2.getValueAt(row, 2)));
+                parent.getPriceField().setEnabled(false);
+
+                try {
+                    ResultSet result = SQL.executeSearch("SELECT `quantity` FROM `inventory` WHERE `menu_item_id`='" + jTable2.getValueAt(row, 0) + "'");
+
+                    if (result.next()) {
+                        String qtyString = result.getString("quantity");
+                        Double qty = Double.valueOf(qtyString);
+                        if (qty > 0) {
+                            parent.getItemStatusField().setText("Available");
+                            parent.getItemQty().setText(result.getString("quantity"));
+                        } else if (qty == 0) {
+                            parent.getItemStatusField().setText("Out of Stock");
+                            parent.getItemQty().setText("0");
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
@@ -457,7 +496,7 @@ public class InventoryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
-loadTable();        // TODO add your handling code here:
+        loadTable();        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     /**
@@ -503,4 +542,8 @@ loadTable();        // TODO add your handling code here:
     private javax.swing.JTextField jTextField4;
     private keeptoo.KGradientPanel kGradientPanel1;
     // End of variables declaration//GEN-END:variables
+public JTabbedPane setTabPane() {
+        return jTabbedPane1;
+    }
+
 }

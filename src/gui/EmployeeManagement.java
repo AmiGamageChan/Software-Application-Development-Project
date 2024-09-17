@@ -23,23 +23,23 @@ import raven.toast.Notifications;
  * @author AmiChan
  */
 public class EmployeeManagement extends javax.swing.JFrame {
-    
-    public static final Logger logger = Logger.getLogger(UserLogin.class.getName());
+
+    private static final Logger logger = Logger.getLogger(UserLogin.class.getName());
     private static HashMap<String, String> typeMap = new HashMap<>();
-    
+
     private void setLogger() {
         try {
             FileHandler fileHandler = new FileHandler("Log Reports/Employee Management Log Report.log", true);
             fileHandler.setFormatter(new SimpleFormatter());
-            
+
             logger.addHandler(fileHandler);
-            
+
             logger.info("EM Logger initialized");
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Failed to initialize the log file");
-            
+
         }
     }
 
@@ -52,28 +52,28 @@ public class EmployeeManagement extends javax.swing.JFrame {
         loadTable();
         loadComboBox();
     }
-    
+
     private void loadTable() {
         try {
             DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
             centerRenderer.setHorizontalAlignment(JLabel.CENTER);
             DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
-            
+
             dtm.setRowCount(0);
-            
+
             ResultSet result = SQL.executeSearch("SELECT * FROM `User` INNER JOIN `user_type` ON `user`.`user_type_id`=`user_type`.`id`");
-            
+
             while (result.next()) {
                 Vector<String> vector = new Vector<>();
-                
+
                 vector.add(result.getString("id"));
                 vector.add(result.getString("fname"));
                 vector.add(result.getString("lname"));
                 vector.add(result.getString("email"));
                 vector.add(result.getString("user_type.name"));
-                
+
                 dtm.addRow(vector);
-                
+
             }
             for (int i = 0; i < jTable1.getColumnModel().getColumnCount(); i++) {
                 jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -83,7 +83,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
             logger.warning("Table load error");
         }
     }
-    
+
     private void loadComboBox() {
         try {
             ResultSet result = SQL.executeSearch("SELECT * FROM `user_type`");
@@ -93,22 +93,22 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 vector.add(result.getString("name"));
                 typeMap.put(result.getString("name"), result.getString("id"));
             }
-            
+
             DefaultComboBoxModel dcm = new DefaultComboBoxModel(vector);
             jComboBox1.setModel(dcm);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Loading combo box failed");
         }
     }
-    
+
     private void reset() {
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
         jTextField4.setText("");
-        
+
         jComboBox1.setSelectedIndex(0);
     }
 
@@ -343,9 +343,9 @@ public class EmployeeManagement extends javax.swing.JFrame {
         String lname = jTextField2.getText();
         String email = jTextField3.getText();
         String pass = jTextField4.getText();
-        
+
         String emailValid = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        
+
         if (fname.isEmpty()) {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter your first name");
         } else if (lname.isEmpty()) {
@@ -370,7 +370,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 logger.info("SQL exception");
             }
         }
-        
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

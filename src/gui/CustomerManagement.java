@@ -11,6 +11,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.SQL;
@@ -23,6 +24,8 @@ import raven.toast.Notifications;
 public class CustomerManagement extends javax.swing.JFrame {
 
     public static final Logger logger = Logger.getLogger(UserLogin.class.getName());
+    private MainFrame parent;
+    public String mainFrame = "null";
 
     private void setLogger() {
         try {
@@ -38,6 +41,10 @@ public class CustomerManagement extends javax.swing.JFrame {
             logger.severe("Failed to initialize the log file");
 
         }
+    }
+
+    public void setParent(MainFrame mf) {
+        this.parent = mf;
     }
 
     /**
@@ -80,11 +87,12 @@ public class CustomerManagement extends javax.swing.JFrame {
         }
     }
 
-    private void reset(){
+    private void reset() {
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -220,6 +228,11 @@ public class CustomerManagement extends javax.swing.JFrame {
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -330,6 +343,22 @@ public class CustomerManagement extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if (evt.getClickCount() == 2) {
+            if (mainFrame.equals("null")) {
+//         Update..
+                System.out.println("update");
+            } else if (mainFrame.equals("main")) {
+                int row = jTable1.getSelectedRow();
+                parent.getCustomerName().setText(String.valueOf(jTable1.getValueAt(row, 1)));
+                parent.getCustomerMobile().setText(String.valueOf(jTable1.getValueAt(row, 3)));
+                parent.getCustomerPoints().setText(String.valueOf(jTable1.getValueAt(row, 4)));
+
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -365,4 +394,9 @@ public class CustomerManagement extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private keeptoo.KGradientPanel kGradientPanel1;
     // End of variables declaration//GEN-END:variables
+
+    public JTabbedPane setTabPane() {
+        return jTabbedPane1;
+    }
+
 }
