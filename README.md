@@ -1,2 +1,2 @@
 # Software-Application-Development-Project
-POS System for a restaurant using Java 
+POS System for a bakery using Java 
