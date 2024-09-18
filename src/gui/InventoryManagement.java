@@ -5,14 +5,17 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import static gui.CustomerManagement.logger;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +28,7 @@ import raven.toast.Notifications;
  */
 public class InventoryManagement extends javax.swing.JFrame {
 
+    private String ItemIDM;
     private static final Logger logger = Logger.getLogger(UserLogin.class.getName());
     public String mainFrame = "null";
 
@@ -43,7 +47,7 @@ public class InventoryManagement extends javax.swing.JFrame {
 
         }
     }
-    
+
     private static HashMap<String, String> itemTypeMap = new HashMap<>();
     private MainFrame parent;
 
@@ -189,6 +193,11 @@ public class InventoryManagement extends javax.swing.JFrame {
 
         jButton2.setText("Update Stock");
         jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setText("Name");
@@ -285,7 +294,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                 .addGap(35, 35, 35))
         );
 
-        jTabbedPane1.addTab("Single Item View", jPanel2);
+        jTabbedPane1.addTab("Manage Inventory", jPanel2);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -415,7 +424,7 @@ public class InventoryManagement extends javax.swing.JFrame {
             if (evt.getClickCount() == 2) {
                 int row = jTable2.getSelectedRow();
                 jTabbedPane1.setSelectedIndex(0);
-
+                ItemIDM = String.valueOf(jTable2.getValueAt(row, 0));
                 jTextField1.setText(String.valueOf(jTable2.getValueAt(row, 1)));
                 jTextField2.setText(String.valueOf(jTable2.getValueAt(row, 2)));
                 jTextField3.setText(String.valueOf(jTable2.getValueAt(row, 4)));
@@ -427,6 +436,7 @@ public class InventoryManagement extends javax.swing.JFrame {
         } else if (mainFrame.equals("main")) {
             if (evt.getClickCount() == 2) {
                 int row = jTable2.getSelectedRow();
+                parent.itemID = String.valueOf(jTable2.getValueAt(row, 0));
                 parent.getItemField().setText(String.valueOf(jTable2.getValueAt(row, 1)));
                 parent.getItemField().setEnabled(false);
                 parent.getPriceField().setText(String.valueOf(jTable2.getValueAt(row, 2)));
@@ -446,6 +456,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                             parent.getItemQty().setText("0");
                         }
                     }
+              
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -498,6 +509,44 @@ public class InventoryManagement extends javax.swing.JFrame {
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
         loadTable();        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ItemStateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String name = jTextField1.getText();
+        String price = jTextField2.getText();
+        String description = jTextField3.getText();
+        String itemType = (String) jComboBox1.getSelectedItem();
+
+        String priceValid = "^-?\\d*(?:\\.\\d+)?$";
+
+        if (name.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter your item name");
+        } else if (price.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter item unit price");
+        } else if (description.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter a description");
+        } else if (!price.matches(priceValid)) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter a valid price");
+        } else if (itemType.equals("Select")) {
+            Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select the item type");
+        } else {
+            //            Success
+            int confirmation = JOptionPane.showConfirmDialog(this, "Confirm Update?", "Update", JOptionPane.YES_NO_OPTION);
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                try {
+                    SQL.executeIUD("UPDATE `menu_item` SET `name`='" + name + "',`price`='" + price + "',`item_type_id`='" + itemTypeMap.get(itemType) + "',`description`='" + description + "' WHERE `id`='" + ItemIDM + "'");
+                    logger.log(Level.INFO, "Details of the item {0} changed", name);
+                    Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Item Details Updated");
+                    reset();
+                    loadTable();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("DB Update Error, SQL Exception");
+                }
+            }
+
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

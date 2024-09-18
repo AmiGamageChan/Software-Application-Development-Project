@@ -109,8 +109,8 @@
                 <Container class="javax.swing.JPanel" name="jPanel2">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Single Item View">
-                        <Property name="tabTitle" type="java.lang.String" value="Single Item View"/>
+                      <JTabbedPaneConstraints tabName="Manage Inventory">
+                        <Property name="tabTitle" type="java.lang.String" value="Manage Inventory"/>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -219,6 +219,9 @@
                         <Property name="text" type="java.lang.String" value="Update Stock"/>
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel3">
                       <Properties>
