@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 
 public class SQL {
 
-    public static Connection connection;
+    private static Connection connection;
 
-    public static void setupCon() {
+    private static void setupCon() {
         try {
             if (connection == null) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
