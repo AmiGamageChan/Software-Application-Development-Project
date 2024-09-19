@@ -660,3 +660,27 @@ Sep 18, 2024 1:37:12 AM gui.MainFrame jButton8ActionPerformed
 INFO: Invoice Printed
 Sep 18, 2024 1:50:48 AM gui.MainFrame jButton8ActionPerformed
 INFO: Invoice Printed
+Sep 18, 2024 7:58:51 PM gui.MainFrame setLogger
+INFO: EM Logger initialized
+Sep 18, 2024 7:58:54 PM gui.InventoryManagement setLogger
+INFO: IM Logger initialized
+Sep 18, 2024 7:59:16 PM gui.MainFrame setLogger
+INFO: EM Logger initialized
+Sep 18, 2024 7:59:24 PM gui.CustomerManagement setLogger
+INFO: CM Logger initialized
+Sep 18, 2024 7:59:30 PM gui.MainFrame setLogger
+INFO: EM Logger initialized
+Sep 18, 2024 7:59:35 PM gui.InventoryManagement setLogger
+INFO: IM Logger initialized
+Sep 18, 2024 7:59:47 PM gui.InventoryManagement setLogger
+INFO: IM Logger initialized
+Sep 18, 2024 8:00:09 PM gui.InventoryManagement setLogger
+INFO: IM Logger initialized
+Sep 18, 2024 8:00:40 PM gui.MainFrame jButton8ActionPerformed
+INFO: Invoice Printed
+Sep 18, 2024 8:04:01 PM gui.UserLogin loginButtonActionPerformed
+INFO: A user logged in ami 
+Sep 18, 2024 8:04:05 PM gui.UserLogin loginButtonActionPerformed
+INFO: A user logged in Amantha 
+Sep 18, 2024 8:04:07 PM gui.EmployeeManagement setLogger
+INFO: EM Logger initialized

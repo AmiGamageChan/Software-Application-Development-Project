@@ -95,6 +95,7 @@ public class MainDashboard extends javax.swing.JFrame {
         orderButton.setBackground(new java.awt.Color(102, 102, 102));
         orderButton.setForeground(new java.awt.Color(204, 255, 204));
         orderButton.setText("Customer Management");
+        orderButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 153), 2, true));
         orderButton.setEnabled(false);
         orderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,6 +106,7 @@ public class MainDashboard extends javax.swing.JFrame {
         tableButton.setBackground(new java.awt.Color(102, 102, 102));
         tableButton.setForeground(new java.awt.Color(204, 255, 204));
         tableButton.setText("Order & Table Management");
+        tableButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 153), 2, true));
         tableButton.setEnabled(false);
         tableButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,6 +117,7 @@ public class MainDashboard extends javax.swing.JFrame {
         inventoryButton.setBackground(new java.awt.Color(102, 102, 102));
         inventoryButton.setForeground(new java.awt.Color(204, 255, 204));
         inventoryButton.setText("Inventory Management");
+        inventoryButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 153), 2, true));
         inventoryButton.setEnabled(false);
         inventoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,6 +143,7 @@ public class MainDashboard extends javax.swing.JFrame {
         employeeButton.setBackground(new java.awt.Color(102, 102, 102));
         employeeButton.setForeground(new java.awt.Color(204, 255, 204));
         employeeButton.setText("Employee Management");
+        employeeButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 153), 2, true));
         employeeButton.setEnabled(false);
         employeeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
