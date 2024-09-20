@@ -466,6 +466,7 @@ public class CustomerManagement extends javax.swing.JFrame {
                 parent.getCustomerName().setText(String.valueOf(jTable1.getValueAt(row, 1)));
                 parent.getCustomerMobile().setText(String.valueOf(jTable1.getValueAt(row, 3)));
                 parent.getCustomerPoints().setText(String.valueOf(jTable1.getValueAt(row, 4)));
+                parent.setCustomerID(String.valueOf(jTable1.getValueAt(row, 0)));
 
                 this.dispose();
             }

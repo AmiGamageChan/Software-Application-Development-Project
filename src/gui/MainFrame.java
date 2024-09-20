@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -63,7 +64,24 @@ public class MainFrame extends javax.swing.JFrame {
     private static HashMap<String, String> paymentMethodMap = new HashMap<>();
     private static HashMap<String, String> orderMethodMap = new HashMap<>();
 
-    private String employeeName = "Ami";
+    private static HashMap<String, String> productIDMap = new HashMap<>();
+
+    private String employeeName = "Amantha";
+    private String employeeID = "1";
+
+    private String productID;
+
+    public void setProductID(String pid) {
+        this.productID = pid;
+    }
+
+    private String customerID;
+
+    public void setCustomerID(String cid) {
+        this.customerID = cid;
+        System.out.println(customerID);
+    }
+
     private MainDashboard mf;
     private boolean tableSelection = false;
 
@@ -82,20 +100,20 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void calculateOrderID() {
-        long id = System.nanoTime();
+        long id = System.currentTimeMillis();
         jTextField4.setText(String.valueOf(id));
     }
 
     public void setParent(MainDashboard mf) {
         this.mf = mf;
         this.employeeName = mf.setNameLabel().getText();
+        this.employeeID = mf.employeeID;
         setEmployee();
     }
 
     private void setEmployee() {
         if (mf != null) {
             jTextField5.setText(employeeName);
-            System.out.println("");
         }
     }
 
@@ -210,6 +228,16 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBox1.setSelected(false);
     }
 
+    private void resetFinal() {
+        customerID = "";
+        jComboBox1.setSelectedIndex(0);
+        jComboBox2.setSelectedIndex(0);
+        jTextField14.setText("");
+
+        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+        dtm.setRowCount(0);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -297,11 +325,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "name", "quantity", "price"
+                "Name", "Quantity", "Unit Price"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false
@@ -1020,7 +1048,7 @@ public class MainFrame extends javax.swing.JFrame {
                 } else if (!quantity.matches(qtyValid)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter a valid quantity");
                 } else {
-                    double qtyInsert = Double.parseDouble(quantity);
+                    int qtyInsert = (int) (Double.parseDouble(quantity));
                     double qtyStock = Double.parseDouble(stockQuantity);
 
                     if (qtyInsert > qtyStock) {
@@ -1035,7 +1063,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                             if (existingName.equals(name)) {
                                 double existingQty = Double.parseDouble(dtm.getValueAt(i, 1).toString());
-                                double newQty = existingQty + qtyInsert;
+                                int newQty = (int) (existingQty + qtyInsert);
 
                                 dtm.setValueAt(newQty, i, 1);
                                 dtm.setValueAt(dPrice, i, 2);
@@ -1050,9 +1078,11 @@ public class MainFrame extends javax.swing.JFrame {
                         if (!itemExists) {
                             Vector<Object> vector = new Vector<>();
                             vector.add(name); //String
-                            vector.add(qtyInsert); //double
+                            vector.add(qtyInsert); //int
                             vector.add(dPrice); //double
                             dtm.addRow(vector);
+
+                            productIDMap.put(name, productID);
 
                             qtyStock -= qtyInsert;
                             jTextField8.setText(String.valueOf((int) Math.floor(qtyStock)));
@@ -1158,7 +1188,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 1");
+                    jTextField9.setText("1");
                 } else if (jLabel8.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1215,7 +1245,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 2");
+                    jTextField9.setText("2");
                 } else if (jLabel9.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1271,7 +1301,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 3");
+                    jTextField9.setText("3");
                 } else if (jLabel10.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1326,7 +1356,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 4");
+                    jTextField9.setText("4");
                 } else if (jLabel11.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1381,7 +1411,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 5");
+                    jTextField9.setText("5");
                 } else if (jLabel12.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1436,7 +1466,7 @@ public class MainFrame extends javax.swing.JFrame {
                     tableSelection = false;
                     jCheckBox2.setEnabled(true);
                     jTabbedPane1.setSelectedIndex(0);
-                    jTextField9.setText("Table 6");
+                    jTextField9.setText("6");
                 } else if (jLabel13.getBackground().equals(Color.RED)) {
                     Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "This table is occupied");
                 }
@@ -1544,6 +1574,8 @@ public class MainFrame extends javax.swing.JFrame {
         String balance = jTextField15.getText();
         String customerName = jTextField10.getText();
 
+        String tableID = jTextField9.getText();
+
         String paymentMethod = (String) jComboBox1.getSelectedItem();
         String orderMethod = (String) jComboBox2.getSelectedItem();
         //view or print report
@@ -1553,39 +1585,162 @@ public class MainFrame extends javax.swing.JFrame {
             } else if (orderMethod.equals("Select")) {
                 Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select an order method");
             } else {
+//                Final Code
+                boolean orderTable = false;
+                boolean orderItems = false;
+                boolean employeeEarnings = false;
+                boolean inventoryUpdate = false;
+
+//Order table Update
                 try {
-                    if (customerName == null || customerName.trim().isEmpty()) {
-                        customerName = "Quick Checkout";
+                    // Construct the SQL query based on the presence of tableID and customerID
+                    String sql;
+                    if (tableID == null || tableID.trim().isEmpty()) {
+                        if (customerID == null || customerID.trim().isEmpty()) {
+                            sql = "INSERT INTO `order` (`id`, `table_id`, `customer_id`, `total_price`, `order_method_id`, `user_id`) "
+                                    + "VALUES ('" + orderID + "', NULL, NULL, '" + totalPrice + "', '" + orderMethodMap.get(orderMethod) + "', '" + employeeID + "')";
+                        } else {
+                            sql = "INSERT INTO `order` (`id`, `table_id`, `customer_id`, `total_price`, `order_method_id`, `user_id`) "
+                                    + "VALUES ('" + orderID + "', NULL, '" + customerID + "', '" + totalPrice + "', '" + orderMethodMap.get(orderMethod) + "', '" + employeeID + "')";
+                        }
+                    } else {
+                        if (customerID == null || customerID.trim().isEmpty()) {
+                            sql = "INSERT INTO `order` (`id`, `table_id`, `customer_id`, `total_price`, `order_method_id`, `user_id`) "
+                                    + "VALUES ('" + orderID + "', '" + tableID + "', NULL, '" + totalPrice + "', '" + orderMethodMap.get(orderMethod) + "', '" + employeeID + "')";
+                        } else {
+                            sql = "INSERT INTO `order` (`id`, `table_id`, `customer_id`, `total_price`, `order_method_id`, `user_id`) "
+                                    + "VALUES ('" + orderID + "', '" + tableID + "', '" + customerID + "', '" + totalPrice + "', '" + orderMethodMap.get(orderMethod) + "', '" + employeeID + "')";
+                        }
                     }
-                    String path = "src/reports/invoice.jasper";
 
-                    HashMap<String, Object> params = new HashMap<>();
-                    params.put("Parameter1", orderMethod);
-                    params.put("Parameter2", empName);
-                    params.put("Parameter3", orderID);
-                    params.put("Parameter4", dateTime);
-                    params.put("Parameter5", totalPrice);
-                    params.put("Parameter6", totalPaid);
-                    params.put("Parameter7", balance);
-                    params.put("Parameter8", paymentMethod);
-                    params.put("Parameter9", customerName);
+                    // Execute the query
+                    SQL.executeIUD(sql);
 
-                    JRTableModelDataSource dataSource = new JRTableModelDataSource(jTable1.getModel());
-
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(path, params, dataSource);
-
-                    JasperViewer.viewReport(jasperPrint, false);
-                    logger.info("Invoice Printed");
+//                    True
+                    orderTable = true;
+                    logger.log(Level.INFO, "Order {0} logged", orderID);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    logger.severe("Jasper Report Loading error :(((");
+                    logger.log(Level.SEVERE, "Order Creation error: {0}", e.getMessage());
+                }
+
+//Order Item table Update
+                try {
+                    int rowCount = jTable1.getRowCount();
+
+                    for (int i = 0; i < rowCount; i++) {
+                        SQL.executeIUD("INSERT INTO `order_item` (`order_id`,`menu_item_id`,`quantity`,`unit_price`) "
+                                + "VALUES ('" + orderID + "','" + productIDMap.get(jTable1.getValueAt(i, 0)) + "','" + jTable1.getValueAt(i, 1) + "','" + jTable1.getValueAt(i, 2) + "')");
+                    }
+
+                    logger.info("Order item records added");
+
+//                    True
+                    orderItems = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("Order Item Table Error");
+                }
+
+//Employee Earnings Update
+                try {
+                    ResultSet earningsResult = SQL.executeSearch("SELECT `earnings` FROM `employee_earnings` WHERE `user_id` = '" + employeeID + "'");
+
+                    if (earningsResult != null && earningsResult.next()) {
+                        double earnings = Double.parseDouble(earningsResult.getString("earnings"));
+                        double finalEarnings = earnings + Double.parseDouble(totalPrice);
+
+                        SQL.executeIUD("UPDATE `employee_earnings` SET `earnings`='" + finalEarnings + "' WHERE `user_id`='" + employeeID + "'");
+
+                        logger.log(Level.INFO, "Employee {0} earnings updated", empName);
+
+//                        True
+                        employeeEarnings = true;
+                    } else {
+                        logger.log(Level.SEVERE, "No earnings record found for user: {0}", employeeID);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("Employee earnings update error");
+                }
+
+//Finally.. Invoice Table
+                try {
+//
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("Invoice table update error");
+                }
+
+//Inventory Update
+                try {
+                    int rowCount = jTable1.getRowCount();
+
+                    for (int i = 0; i < rowCount; i++) {
+                        String qty = String.valueOf(jTable1.getValueAt(i, 1));
+                        String itemId = productIDMap.get(String.valueOf(jTable1.getValueAt(i, 0)));
+
+                        ResultSet result = SQL.executeSearch("SELECT `quantity` FROM `inventory` WHERE `menu_item_id`='" + itemId + "'");
+
+                        if (result != null && result.next()) {
+                            String currentQty = result.getString("quantity");
+                            int finalQty = (int) (Double.parseDouble(currentQty) - Double.parseDouble(qty));
+
+                            SQL.executeIUD("UPDATE `inventory` SET `quantity` = '" + String.valueOf(finalQty) + "' WHERE `menu_item_id`='" + itemId + "'");
+                            SQL.executeIUD("UPDATE `inventory` SET `last_updated` = '" + jTextField16.getText() + "' WHERE `menu_item_id`='" + itemId + "'");
+
+                            logger.log(Level.INFO, "Item ID {0} inventory updated", itemId);
+//                            True
+                            inventoryUpdate = true;
+                        } else {
+                            logger.log(Level.SEVERE, "No inventory found for menu_item_id: {0}", itemId);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "Inventory Updating error: {0}", e.getMessage());
+                }
+
+//Jasper Print
+                if (orderItems == true && orderTable == true && employeeEarnings == true && inventoryUpdate == true) {
+                    try {
+                        if (customerName == null || customerName.trim().isEmpty()) {
+                            customerName = "Quick Checkout";
+                        }
+                        String path = "src/reports/invoice.jasper";
+
+                        HashMap<String, Object> params = new HashMap<>();
+                        params.put("Parameter1", orderMethod);
+                        params.put("Parameter2", empName);
+                        params.put("Parameter3", orderID);
+                        params.put("Parameter4", dateTime);
+                        params.put("Parameter5", totalPrice);
+                        params.put("Parameter6", totalPaid);
+                        params.put("Parameter7", balance);
+                        params.put("Parameter8", paymentMethod);
+                        params.put("Parameter9", customerName);
+
+                        JRTableModelDataSource dataSource = new JRTableModelDataSource(jTable1.getModel());
+
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(path, params, dataSource);
+
+                        JasperViewer.viewReport(jasperPrint, false);
+
+                        resetOne();
+                        resetTwo();
+                        resetThree();
+                        resetFinal();
+                        logger.info("Invoice Printed");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        logger.severe("Jasper Report Loading error :((( kes");
+                    }
                 }
             }
+
         } else {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter the paid amount or add some items to the order");
         }
-
-
     }//GEN-LAST:event_jButton8ActionPerformed
 //    FINAL PROCESS
 //    PRINT BUTTON

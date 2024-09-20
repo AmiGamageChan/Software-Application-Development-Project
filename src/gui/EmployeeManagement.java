@@ -76,7 +76,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 query += " WHERE `user`.`user_type_id`='2'";
                 whereClauseAdded = true;
             }
-            
+
             if (!searchText.isEmpty()) {
                 if (whereClauseAdded) {
                     query += " AND `user`.`fname` LIKE '%" + searchText + "%'";
@@ -489,7 +489,19 @@ public class EmployeeManagement extends javax.swing.JFrame {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select a user type");
         } else {
             try {
-                SQL.executeIUD("INSERT INTO `user` (`fname`,`lname`,`email`,`password`,`user_type_id`) VALUES ('" + fname + "','" + lname + "','" + email + "','" + pass + "','" + typeMap.get(jComboBox1.getSelectedItem()) + "')");
+                SQL.executeIUD("INSERT INTO `user` (`fname`, `lname`, `email`, `password`, `user_type_id`) VALUES ('"
+                        + fname + "', '" + lname + "', '" + email + "', '" + pass + "', '" + typeMap.get(jComboBox1.getSelectedItem()) + "')");
+
+                ResultSet result = SQL.executeSearch("SELECT `id` FROM `user` WHERE `email`='" + email + "'");
+
+                if (result != null && result.next()) {
+                    String id = result.getString("id");
+
+                    SQL.executeIUD("INSERT INTO `employee_earnings` (`user_id`, `earnings`) VALUES ('" + id + "', '0')");
+                } else {
+                    logger.log(Level.SEVERE, "No user found with the email: {0}", email);
+                }
+                
                 loadTable();
                 reset();
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Employee Registered Successfully");
