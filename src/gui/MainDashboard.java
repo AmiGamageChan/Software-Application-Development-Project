@@ -19,24 +19,24 @@ import raven.toast.ToastClientProperties;
  * @author AmiChan
  */
 public class MainDashboard extends javax.swing.JFrame {
-    
-    public String employeeName;
-    
+
+    public String employeeID;
+
     public static final Logger logger = Logger.getLogger(UserLogin.class.getName());
-    
+
     private void setLogger() {
         try {
             FileHandler fileHandler = new FileHandler("Log Reports/Dashboard Log Report.log", true);
             fileHandler.setFormatter(new SimpleFormatter());
-            
+
             logger.addHandler(fileHandler);
-            
+
             logger.info("DB Logger initialized");
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Failed to initialize the log file");
-            
+
         }
     }
 
@@ -320,23 +320,23 @@ public class MainDashboard extends javax.swing.JFrame {
     public JLabel setStatusLabel() {
         return statusLabel;
     }
-    
+
     public JLabel setNameLabel() {
         return nameLabel;
     }
-    
+
     public JButton setOrderButton() {
         return orderButton;
     }
-    
+
     public JButton setTableButton() {
         return tableButton;
     }
-    
+
     public JButton setInvButton() {
         return inventoryButton;
     }
-    
+
     public JButton setEmpButton() {
         return employeeButton;
     }

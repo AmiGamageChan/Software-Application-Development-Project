@@ -5,7 +5,6 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import static gui.CustomerManagement.logger;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Vector;
@@ -441,7 +440,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                 parent.getItemField().setEnabled(false);
                 parent.getPriceField().setText(String.valueOf(jTable2.getValueAt(row, 2)));
                 parent.getPriceField().setEnabled(false);
-
+                parent.setProductID(String.valueOf(jTable2.getValueAt(row,0)));
                 try {
                     ResultSet result = SQL.executeSearch("SELECT `quantity` FROM `inventory` WHERE `menu_item_id`='" + jTable2.getValueAt(row, 0) + "'");
 
@@ -456,7 +455,6 @@ public class InventoryManagement extends javax.swing.JFrame {
                             parent.getItemQty().setText("0");
                         }
                     }
-              
 
                 } catch (Exception e) {
                     e.printStackTrace();
