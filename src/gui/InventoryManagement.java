@@ -5,6 +5,7 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Vector;
@@ -19,6 +20,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.SQL;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import raven.toast.Notifications;
 
 /**
@@ -142,6 +147,8 @@ public class InventoryManagement extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        SelectMenu = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         kGradientPanel1 = new keeptoo.KGradientPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -159,7 +166,6 @@ public class InventoryManagement extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -167,8 +173,18 @@ public class InventoryManagement extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
+
+        SelectMenu.setText("jMenuItem1");
+        SelectMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectMenuActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(SelectMenu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inventory Management");
@@ -223,9 +239,6 @@ public class InventoryManagement extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Select this item");
-        jButton4.setEnabled(false);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -233,7 +246,7 @@ public class InventoryManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,10 +266,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(57, Short.MAX_VALUE))
@@ -264,11 +274,9 @@ public class InventoryManagement extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -338,6 +346,20 @@ public class InventoryManagement extends javax.swing.JFrame {
 
         jLabel9.setText("Search by Name");
 
+        jButton5.setText("Sales Report By Category");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Sales Report By Item");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -345,19 +367,29 @@ public class InventoryManagement extends javax.swing.JFrame {
             .addComponent(jScrollPane2)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(66, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(54, 54, 54))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -418,7 +450,6 @@ public class InventoryManagement extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-
         if (mainFrame.equals("null")) {
             if (evt.getClickCount() == 2) {
                 int row = jTable2.getSelectedRow();
@@ -440,7 +471,7 @@ public class InventoryManagement extends javax.swing.JFrame {
                 parent.getItemField().setEnabled(false);
                 parent.getPriceField().setText(String.valueOf(jTable2.getValueAt(row, 2)));
                 parent.getPriceField().setEnabled(false);
-                parent.setProductID(String.valueOf(jTable2.getValueAt(row,0)));
+                parent.setProductID(String.valueOf(jTable2.getValueAt(row, 0)));
                 try {
                     ResultSet result = SQL.executeSearch("SELECT `quantity` FROM `inventory` WHERE `menu_item_id`='" + jTable2.getValueAt(row, 0) + "'");
 
@@ -461,6 +492,13 @@ public class InventoryManagement extends javax.swing.JFrame {
                 }
                 this.dispose();
             }
+        }
+
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            int row = jTable2.rowAtPoint(evt.getPoint());
+            jTable2.setRowSelectionInterval(row, row);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+            SelectMenu.setText("Select");
         }
     }//GEN-LAST:event_jTable2MouseClicked
 
@@ -546,6 +584,108 @@ public class InventoryManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            String path = "src/reports/InventorySalesReport.jasper";
+            HashMap<String, Object> params = new HashMap<>();
+
+            ResultSet result = SQL.executeSearch("SELECT item_type.name AS name, SUM(order_item.quantity * menu_item.price) AS total_sales FROM order_item JOIN menu_item ON order_item.menu_item_id = menu_item.id JOIN item_type ON menu_item.item_type_id = item_type.id GROUP BY item_type.name;");
+
+            DefaultTableModel dtm = new DefaultTableModel(new String[]{"name", "total_sales"}, 0);
+
+            while (result.next()) {
+                Vector<Object> vector = new Vector<>();
+                vector.add(result.getString("name"));
+                vector.add(result.getDouble("total_sales"));
+                dtm.addRow(vector);
+            }
+            JRTableModelDataSource dataSource = new JRTableModelDataSource(dtm);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(path, params, dataSource);
+
+            JasperViewer.viewReport(jasperPrint, false);
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Inventory Sales report viewed");
+            logger.log(Level.INFO, "Inventory Sales report viewed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.log(Level.SEVERE, "Jasper Report Loading error: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            String path = "src/reports/ReportPerItem.jasper";
+            HashMap<String, Object> params = new HashMap<>();
+
+            ResultSet result = SQL.executeSearch("SELECT menu_item.name AS item_name, SUM(order_item.quantity) AS total_quantity_sold FROM order_item JOIN menu_item ON order_item.menu_item_id = menu_item.id GROUP BY menu_item.name");
+            DefaultTableModel dtm = new DefaultTableModel(new String[]{"item_name", "total_quantity_sold"}, 0);
+
+            while (result.next()) {
+                Vector<Object> vector = new Vector<>();
+                vector.add(result.getString("item_name"));
+                vector.add(result.getDouble("total_quantity_sold"));
+                dtm.addRow(vector);
+            }
+            JRTableModelDataSource dataSource = new JRTableModelDataSource(dtm);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(path, params, dataSource);
+
+            JasperViewer.viewReport(jasperPrint, false);
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Inventory Sales per Item report viewed");
+            logger.log(Level.INFO, "Inventory Sales per Item report viewed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.log(Level.SEVERE, "Jasper Report Loading error: {0}", e.getMessage());
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void SelectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectMenuActionPerformed
+
+        if (mainFrame.equals("null")) {
+
+            int row = jTable2.getSelectedRow();
+            jTabbedPane1.setSelectedIndex(0);
+            ItemIDM = String.valueOf(jTable2.getValueAt(row, 0));
+            jTextField1.setText(String.valueOf(jTable2.getValueAt(row, 1)));
+            jTextField2.setText(String.valueOf(jTable2.getValueAt(row, 2)));
+            jTextField3.setText(String.valueOf(jTable2.getValueAt(row, 4)));
+            jComboBox1.setSelectedItem(String.valueOf(jTable2.getValueAt(row, 3)));
+
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Item Selected");
+
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(true);
+
+        } else if (mainFrame.equals("main")) {
+            int row = jTable2.getSelectedRow();
+            parent.itemID = String.valueOf(jTable2.getValueAt(row, 0));
+            parent.getItemField().setText(String.valueOf(jTable2.getValueAt(row, 1)));
+            parent.getItemField().setEnabled(false);
+            parent.getPriceField().setText(String.valueOf(jTable2.getValueAt(row, 2)));
+            parent.getPriceField().setEnabled(false);
+            parent.setProductID(String.valueOf(jTable2.getValueAt(row, 0)));
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Item Selected");
+            try {
+                ResultSet result = SQL.executeSearch("SELECT `quantity` FROM `inventory` WHERE `menu_item_id`='" + jTable2.getValueAt(row, 0) + "'");
+
+                if (result.next()) {
+                    String qtyString = result.getString("quantity");
+                    Double qty = Double.valueOf(qtyString);
+                    if (qty > 0) {
+                        parent.getItemStatusField().setText("Available");
+                        parent.getItemQty().setText(result.getString("quantity"));
+                    } else if (qty == 0) {
+                        parent.getItemStatusField().setText("Out of Stock");
+                        parent.getItemQty().setText("0");
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            this.dispose();
+
+        }
+    }//GEN-LAST:event_SelectMenuActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -562,10 +702,12 @@ public class InventoryManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem SelectMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
@@ -580,6 +722,7 @@ public class InventoryManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable2;

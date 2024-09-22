@@ -6,7 +6,7 @@ package gui;
 
 import java.sql.ResultSet;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import static gui.CustomerManagement.logger;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.FileHandler;
@@ -19,6 +19,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import model.SQL;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import raven.toast.Notifications;
 
 /**
@@ -54,6 +58,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
         setLogger();
         loadTable();
         loadComboBox();
+        TableListener();
     }
 
     private void loadTable() {
@@ -115,6 +120,21 @@ public class EmployeeManagement extends javax.swing.JFrame {
         }
     }
 
+    private void TableListener() {
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                if (jTable1.getSelectedRow() != -1) {
+                    int row = jTable1.getSelectedRow();
+                    jButton4.setEnabled(true);
+                    jButton4.setText(String.format("Employee %s Earnings Report", String.valueOf(jTable1.getValueAt(row, 1))));
+                } else {
+                    jButton4.setEnabled(false);
+                    jButton4.setText("Employee Earnings Report");
+                }
+            }
+        });
+    }
+
     private void loadComboBox() {
         try {
             ResultSet result = SQL.executeSearch("SELECT * FROM `user_type`");
@@ -156,6 +176,9 @@ public class EmployeeManagement extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        SelectMenu = new javax.swing.JMenuItem();
+        DeleteMenu = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         kGradientPanel1 = new keeptoo.KGradientPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -186,6 +209,23 @@ public class EmployeeManagement extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jTextField99 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
+
+        SelectMenu.setText("jMenuItem1");
+        SelectMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectMenuActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(SelectMenu);
+
+        DeleteMenu.setText("jMenuItem1");
+        DeleteMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteMenuActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(DeleteMenu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Employee Management");
@@ -381,6 +421,14 @@ public class EmployeeManagement extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Employee Earnings Report");
+        jButton4.setEnabled(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -388,20 +436,25 @@ public class EmployeeManagement extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField99, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField99, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField99, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
@@ -501,7 +554,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 } else {
                     logger.log(Level.SEVERE, "No user found with the email: {0}", email);
                 }
-                
+
                 loadTable();
                 reset();
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Employee Registered Successfully");
@@ -582,6 +635,14 @@ public class EmployeeManagement extends javax.swing.JFrame {
             jButton1.setEnabled(false);
             jButton2.setEnabled(true);
         }
+
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            int row = jTable1.rowAtPoint(evt.getPoint());
+            jTable1.setRowSelectionInterval(row, row);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+            DeleteMenu.setText("Delete");
+            SelectMenu.setText("Select");
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
@@ -591,6 +652,81 @@ public class EmployeeManagement extends javax.swing.JFrame {
     private void jTextField99KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField99KeyReleased
         loadTable();     // TODO add your handling code here:
     }//GEN-LAST:event_jTextField99KeyReleased
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int row = jTable1.getSelectedRow();
+        String id = (String) jTable1.getValueAt(row, 0);
+
+        try {
+            String path = "src/reports/EmployeeEarningsReport.jasper";
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("x", id);
+
+            ResultSet result = SQL.executeSearch("SELECT id, fname, earnings FROM `user` INNER JOIN `employee_earnings` ON `user`.`id` = `employee_earnings`.`user_id` WHERE `id`= '" + id + "'");
+            if (!result.isBeforeFirst()) {
+                Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "No data found for the given ID");
+
+                logger.log(Level.SEVERE, "No data found for the given ID: {0}", id);
+                return;
+            }
+            DefaultTableModel dtm = new DefaultTableModel(new String[]{"id", "fname", "earnings"}, 0);
+            while (result.next()) {
+                Vector<Object> vector = new Vector<>();
+                vector.add(result.getInt("id"));
+                vector.add(result.getString("fname"));
+                vector.add(result.getDouble("earnings"));
+                dtm.addRow(vector);
+            }
+
+            JRTableModelDataSource dataSource = new JRTableModelDataSource(dtm);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(path, params, dataSource);
+            JasperViewer.viewReport(jasperPrint, false);
+
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Employee Earnings report viewed");
+            logger.log(Level.INFO, "Employee {0} earnings report viewed", String.valueOf(jTable1.getValueAt(row, 1)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.log(Level.SEVERE, "Jasper Report Loading error: {0}", e.getMessage());
+        }
+
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void DeleteMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMenuActionPerformed
+        int row = jTable1.getSelectedRow();
+        String id = (String) jTable1.getValueAt(row, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Confirm Employee Deletion", "Deletion", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                logger.log(Level.INFO,"Employee Record Deleted {0}",String.valueOf(jTable1.getValueAt(row, 1)));
+                
+                SQL.executeIUD("DELETE FROM `employee_earnings` WHERE `user_id`='" + id + "'");
+                SQL.executeIUD("DELETE FROM `user` WHERE `id`='" + id + "'");
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.severe("Employee Record Deletion error");
+            }
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Employee Record Deleted");
+        }
+        loadTable();
+    }//GEN-LAST:event_DeleteMenuActionPerformed
+
+    private void SelectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectMenuActionPerformed
+        int row = jTable1.getSelectedRow();
+        jTextField5.setText(String.valueOf(jTable1.getValueAt(row, 0)));
+        jTextField1.setText(String.valueOf(jTable1.getValueAt(row, 1)));
+        jTextField2.setText(String.valueOf(jTable1.getValueAt(row, 2)));
+        jTextField3.setText(String.valueOf(jTable1.getValueAt(row, 3)));
+        jComboBox1.setSelectedItem(String.valueOf(jTable1.getValueAt(row, 4)));
+        jTabbedPane1.setSelectedIndex(0);
+
+        jButton1.setEnabled(false);
+        jButton2.setEnabled(true);
+        Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Employee Selected");
+    }//GEN-LAST:event_SelectMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -609,9 +745,12 @@ public class EmployeeManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem DeleteMenu;
+    private javax.swing.JMenuItem SelectMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -629,6 +768,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;

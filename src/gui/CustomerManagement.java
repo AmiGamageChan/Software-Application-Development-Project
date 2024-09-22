@@ -6,6 +6,7 @@ package gui;
 
 import java.sql.ResultSet;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -117,6 +118,9 @@ public class CustomerManagement extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        SelectMenu = new javax.swing.JMenuItem();
+        DeleteMenu = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         kGradientPanel1 = new keeptoo.KGradientPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -142,6 +146,22 @@ public class CustomerManagement extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jTextField99 = new javax.swing.JTextField();
+
+        SelectMenu.setText("jMenuItem1");
+        SelectMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectMenuActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(SelectMenu);
+
+        DeleteMenu.setText("jMenuItem1");
+        DeleteMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteMenuActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(DeleteMenu);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Customer Management");
@@ -471,6 +491,14 @@ public class CustomerManagement extends javax.swing.JFrame {
                 this.dispose();
             }
         }
+
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            int row = jTable1.rowAtPoint(evt.getPoint());
+            jTable1.setRowSelectionInterval(row, row);
+            jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+            DeleteMenu.setText("Delete");
+            SelectMenu.setText("Select");
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -521,6 +549,52 @@ public class CustomerManagement extends javax.swing.JFrame {
         loadTable();     // TODO add your handling code here:
     }//GEN-LAST:event_jTextField99KeyReleased
 
+    private void SelectMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectMenuActionPerformed
+        if (mainFrame.equals("null")) {
+//                Update
+            int row = jTable1.getSelectedRow();
+            jTextField4.setText(String.valueOf(jTable1.getValueAt(row, 0)));
+            jTextField1.setText(String.valueOf(jTable1.getValueAt(row, 1)));
+            jTextField2.setText(String.valueOf(jTable1.getValueAt(row, 2)));
+            jTextField3.setText(String.valueOf(jTable1.getValueAt(row, 3)));
+            jTabbedPane1.setSelectedIndex(0);
+
+            jButton1.setEnabled(false);
+            jButton2.setEnabled(true);
+
+        } else if (mainFrame.equals("main")) {
+//                From MainFrame
+            int row = jTable1.getSelectedRow();
+            parent.getCustomerName().setText(String.valueOf(jTable1.getValueAt(row, 1)));
+            parent.getCustomerMobile().setText(String.valueOf(jTable1.getValueAt(row, 3)));
+            parent.getCustomerPoints().setText(String.valueOf(jTable1.getValueAt(row, 4)));
+            parent.setCustomerID(String.valueOf(jTable1.getValueAt(row, 0)));
+
+            this.dispose();
+        }
+
+        Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Customer Selected");
+    }//GEN-LAST:event_SelectMenuActionPerformed
+
+    private void DeleteMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMenuActionPerformed
+        int row = jTable1.getSelectedRow();
+        String id = (String) jTable1.getValueAt(row, 0);
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Confirm Customer Deletion", "Deletion", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                logger.log(Level.INFO, "Customer Record Deleted {0}", String.valueOf(jTable1.getValueAt(row, 1)));
+                SQL.executeIUD("DELETE FROM `customer` WHERE `id`='" + id + "'");
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.severe("Employee Record Deletion error");
+            }
+            Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Customer Record Deleted");
+        }
+        loadTable();
+    }//GEN-LAST:event_DeleteMenuActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -538,6 +612,8 @@ public class CustomerManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem DeleteMenu;
+    private javax.swing.JMenuItem SelectMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -554,6 +630,7 @@ public class CustomerManagement extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;

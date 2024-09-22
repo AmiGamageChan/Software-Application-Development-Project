@@ -43,6 +43,8 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private MainDashboard mf;
+
     private static final Logger logger = Logger.getLogger(UserLogin.class.getName());
     public String itemID;
 
@@ -66,25 +68,24 @@ public class MainFrame extends javax.swing.JFrame {
     private static HashMap<String, String> paymentMethodMap = new HashMap<>();
     private static HashMap<String, String> orderMethodMap = new HashMap<>();
 
+    private String employeeName = "danusi";//Amnt for test @overridden by Dashboard
+    private String employeeID = "7"; //1 for test @overridden by Dashboard
+
     private static HashMap<String, String> productIDMap = new HashMap<>();
-
-    private String employeeName = "Amantha";
-    private String employeeID = "1";
-
     private String productID;
 
     public void setProductID(String pid) {
         this.productID = pid;
     }
 
+    private String finalCusPoints;
     private String customerID;
 
     public void setCustomerID(String cid) {
         this.customerID = cid;
-        System.out.println(customerID);
+        jCheckBox1.setEnabled(true);
     }
 
-    private MainDashboard mf;
     private boolean tableSelection = false;
 
     /**
@@ -244,8 +245,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
         timer.start();
     }
-//    Resets
 
+//    Resets
     private void resetOne() {
         calculateOrderID();
         jTextField2.setText("");
@@ -273,6 +274,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField14.setText("");
         jTextField6.setText("");
         jTextField15.setText("");
+        jCheckBox1.setEnabled(false);
 
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
         dtm.setRowCount(0);
@@ -547,6 +549,7 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel17.setText("Amantha Gamage @ Java Institute");
 
         jCheckBox1.setText("Use Points");
+        jCheckBox1.setEnabled(false);
         jCheckBox1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jCheckBox1StateChanged(evt);
@@ -1194,6 +1197,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        jTextField1.setText("");
         InventoryManagement im = new InventoryManagement();
         im.setTabPane().setSelectedIndex(1);
         im.setTabPane().setEnabledAt(0, false);
@@ -1633,7 +1637,12 @@ public class MainFrame extends javax.swing.JFrame {
             int confirm = JOptionPane.showConfirmDialog(this, "Confirm row deletion", "Deletion", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                dtm.removeRow(row);
+                try {
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("Employee Management Delete error");
+                }
                 Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Item Row Deleted");
             }
         }
@@ -1661,6 +1670,7 @@ public class MainFrame extends javax.swing.JFrame {
         String customerName = jTextField10.getText();
 
         String discount = jTextField17.getText();
+        String pointsUse = jTextField13.getText();
 
         String tableID = jTextField9.getText();
 
@@ -1672,6 +1682,8 @@ public class MainFrame extends javax.swing.JFrame {
                 Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select a payment method");
             } else if (orderMethod.equals("Select")) {
                 Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select an order method");
+            } else if (orderMethod.equals("Dine In") && (tableID == null || tableID.trim().isEmpty())) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select a table for the customer");
             } else {
 //                Final Code
                 boolean pointsUsed = false;
@@ -1700,27 +1712,29 @@ public class MainFrame extends javax.swing.JFrame {
                     }
                 } else if (jCheckBox1.isSelected() == false) {
                     try {
-                        double paidAmount = Double.parseDouble(jTextField14.getText());
+                        if (customerID != null && !customerID.trim().isEmpty()) {
+                            double paidAmount = Double.parseDouble(jTextField14.getText());
+                            double pointsForPaidAmount = paidAmount / 100;
+                            double availablePoints = Double.parseDouble(jTextField12.getText());
 
-                        double pointsForPaidAmount = paidAmount / 100;
-                        double availablePoints = Double.parseDouble(jTextField12.getText());
+                            double finalPoints = availablePoints + pointsForPaidAmount;
 
-                        double finalPoints = availablePoints + pointsForPaidAmount;
+                            this.finalCusPoints = String.valueOf(finalPoints);
 
-                        SQL.executeIUD("UPDATE `customer` SET `points`='" + finalPoints + "' WHERE `id`='" + customerID + "'");
+                            SQL.executeIUD("UPDATE `customer` SET `points`='" + finalPoints + "' WHERE `id`='" + customerID + "'");
 
-//                        false
-                        pointsUsed = false;
-                        logger.log(Level.INFO, "Customer ID {0} points updated", customerID);
+                            pointsUsed = false;
+                            logger.log(Level.INFO, "Customer ID {0} points updated", customerID);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        logger.log(Level.SEVERE, "Customer points updating error: {0}", e.getMessage());
+                        logger.log(Level.SEVERE, "Error updating customer points: {0}", e.getMessage());
                     }
+
                 }
 
 //Order table Update
                 try {
-                    // Construct the SQL query based on the presence of tableID and customerID
                     String sql;
                     if (tableID == null || tableID.trim().isEmpty()) {
                         if (customerID == null || customerID.trim().isEmpty()) {
@@ -1740,7 +1754,6 @@ public class MainFrame extends javax.swing.JFrame {
                         }
                     }
 
-                    // Execute the query
                     SQL.executeIUD(sql);
 
 //                    True
@@ -1840,10 +1853,12 @@ public class MainFrame extends javax.swing.JFrame {
 
 //Jasper Print
                 if (orderItems == true && orderTable == true && employeeEarnings == true && inventoryUpdate == true && invoiceUpdate == true) {
+
                     try {
                         if (customerName == null || customerName.trim().isEmpty()) {
                             customerName = "Quick Checkout";
                         }
+
                         String path = "src/reports/invoice.jasper";
 
                         HashMap<String, Object> params = new HashMap<>();
@@ -1856,12 +1871,12 @@ public class MainFrame extends javax.swing.JFrame {
                         params.put("Parameter7", balance);
                         params.put("Parameter8", paymentMethod);
                         params.put("Parameter9", customerName);
-                        params.put("Parameter10", jTextField17.getText());
+                        params.put("Parameter10", discount);
 
-                        if (pointsUsed == true) {
-                            params.put("Parameter10", jTextField13.getText());
-                        } else if (pointsUsed == false) {
-                            params.put("Parameter10", "0");
+                        if (pointsUsed) {
+                            params.put("Parameter11", "-" + pointsUse);
+                        } else {
+                            params.put("Parameter11", "+" + finalCusPoints);
                         }
 
                         JRTableModelDataSource dataSource = new JRTableModelDataSource(jTable1.getModel());
@@ -1874,14 +1889,15 @@ public class MainFrame extends javax.swing.JFrame {
                         resetTwo();
                         resetThree();
                         resetFinal();
+                        Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_CENTER, "Invoice Printed");
                         logger.log(Level.INFO, "Invoice Printed for Order ID ''{0}''", orderID);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         logger.severe("Jasper Report Loading error :((( kes");
                     }
                 }
             }
-
         } else {
             Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter the paid amount or add some items to the order");
         }
