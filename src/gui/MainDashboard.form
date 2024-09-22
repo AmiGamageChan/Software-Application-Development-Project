@@ -76,11 +76,11 @@
         <Container class="keeptoo.KGradientPanel" name="kGradientPanel1">
           <Properties>
             <Property name="kEndColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="ff" green="ff" red="0" type="rgb"/>
+              <Color blue="66" green="66" red="0" type="rgb"/>
             </Property>
             <Property name="kGradientFocus" type="int" value="200"/>
             <Property name="kStartColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="cc" green="ff" red="cc" type="rgb"/>
+              <Color blue="33" green="0" red="66" type="rgb"/>
             </Property>
           </Properties>
 
@@ -207,9 +207,7 @@
                     <Property name="text" type="java.lang.String" value="Customer Management"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true" thickness="2">
-                          <Color PropertyName="color" blue="99" green="ff" red="0" type="rgb"/>
-                        </LineBorder>
+                        <LineBorder roundedCorners="true"/>
                       </Border>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
@@ -229,9 +227,7 @@
                     <Property name="text" type="java.lang.String" value="Order &amp; Table Management"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true" thickness="2">
-                          <Color PropertyName="color" blue="99" green="ff" red="0" type="rgb"/>
-                        </LineBorder>
+                        <LineBorder roundedCorners="true"/>
                       </Border>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
@@ -251,9 +247,7 @@
                     <Property name="text" type="java.lang.String" value="Inventory Management"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true" thickness="2">
-                          <Color PropertyName="color" blue="99" green="ff" red="0" type="rgb"/>
-                        </LineBorder>
+                        <LineBorder roundedCorners="true"/>
                       </Border>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
@@ -303,9 +297,7 @@
                     <Property name="text" type="java.lang.String" value="Employee Management"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder roundedCorners="true" thickness="2">
-                          <Color PropertyName="color" blue="99" green="ff" red="0" type="rgb"/>
-                        </LineBorder>
+                        <LineBorder roundedCorners="true"/>
                       </Border>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
