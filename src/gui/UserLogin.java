@@ -222,7 +222,7 @@ public class UserLogin extends javax.swing.JDialog {
 
         signInButton.setBackground(new java.awt.Color(0, 0, 0));
         signInButton.setForeground(new java.awt.Color(255, 255, 255));
-        signInButton.setText("Login");
+        signInButton.setText("Register");
         signInButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signInButtonActionPerformed(evt);
@@ -425,6 +425,15 @@ public class UserLogin extends javax.swing.JDialog {
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "User Registered Successfully");
                     clearAll();
                     MainDashboard.logger.info("A user registered");
+                    ResultSet result1 = SQL.executeSearch("SELECT `id` FROM `user` WHERE `email`='" + email + "'");
+
+                    if (result1 != null && result1.next()) {
+                        String id = result1.getString("id");
+
+                        SQL.executeIUD("INSERT INTO `employee_earnings` (`user_id`, `earnings`) VALUES ('" + id + "', '0')");
+                    } else {
+                        MainDashboard.logger.log(Level.SEVERE, "No user found with the email: {0}", email);
+                    }
                 }
 
             } catch (Exception e) {

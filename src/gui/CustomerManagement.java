@@ -22,7 +22,7 @@ import raven.toast.Notifications;
 
 /**
  *
- * @author AmiChan
+ * @author AmiChans
  */
 public class CustomerManagement extends javax.swing.JFrame {
 
