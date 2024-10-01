@@ -700,11 +700,11 @@ public class EmployeeManagement extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                logger.log(Level.INFO,"Employee Record Deleted {0}",String.valueOf(jTable1.getValueAt(row, 1)));
-                
+                logger.log(Level.INFO, "Employee Record Deleted {0}", String.valueOf(jTable1.getValueAt(row, 1)));
+
                 SQL.executeIUD("DELETE FROM `employee_earnings` WHERE `user_id`='" + id + "'");
                 SQL.executeIUD("DELETE FROM `user` WHERE `id`='" + id + "'");
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.severe("Employee Record Deletion error");

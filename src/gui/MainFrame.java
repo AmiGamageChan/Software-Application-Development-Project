@@ -1639,7 +1639,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
-                    
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     logger.severe("Employee Management Delete error");
@@ -1685,6 +1685,8 @@ public class MainFrame extends javax.swing.JFrame {
                 Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select an order method");
             } else if (orderMethod.equals("Dine In") && (tableID == null || tableID.trim().isEmpty())) {
                 Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please select a table for the customer");
+            } else if (Double.parseDouble(totalPrice) > (Double.parseDouble(totalPaid) + Double.parseDouble(discount))) {
+                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.TOP_CENTER, "Please enter the paid amount properly");
             } else {
 //                Final Code
                 boolean pointsUsed = false;
@@ -1720,7 +1722,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                             double finalPoints = availablePoints + pointsForPaidAmount;
 
-                            this.finalCusPoints = String.valueOf(finalPoints);
+                            this.finalCusPoints = String.valueOf(pointsForPaidAmount);
 
                             SQL.executeIUD("UPDATE `customer` SET `points`='" + finalPoints + "' WHERE `id`='" + customerID + "'");
 
